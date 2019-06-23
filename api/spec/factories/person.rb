@@ -13,5 +13,7 @@ FactoryBot.define do
     twitter    { "jahrocks" }
     linkedin   { "jahio" }
     bio        { SecureRandom.hex(256) }
+    password   { SecureRandom.hex(32)  }
+    auth_token { SecureRandom.hex(32)  }
   end
 end

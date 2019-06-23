@@ -1,5 +1,6 @@
 class PeopleController < ApplicationController
   before_action :set_person, only: [:show, :update, :destroy]
+  before_action :authenticate
 
   # GET /people
   def index
@@ -38,14 +39,30 @@ class PeopleController < ApplicationController
     @person.destroy
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_person
-      @person = Person.find(params[:id])
-    end
+private
 
-    # Only allow a trusted parameter "white list" through.
-    def person_params
-      params.fetch(:person, {})
+  #
+  # Authenticate: Checks the X-Auth-Token header against what the user's auth
+  # token should be.
+  #
+  def authenticate
+    #
+    # Look for X-Auth-Token in headers, and select based on it. That'll tell
+    # you who the user is and prove that they're logged in.
+    #
+    @user = Person.find_by_auth_token(request.headers['HTTP_X_AUTH_TOKEN'])
+    if @user.blank?
+      render json: {status: "Not authorized"}, status: 401
     end
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_person
+    @person = Person.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def person_params
+    params.fetch(:person, {})
+  end
 end

@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2019_06_23_050441) do
 
   create_table "people", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "password_digest"
+    t.string "auth_token"
     t.string "first_name"
     t.string "last_name"
     t.string "address"
@@ -34,6 +35,7 @@ ActiveRecord::Schema.define(version: 2019_06_23_050441) do
     t.text "bio"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["auth_token"], name: "index_people_on_auth_token"
     t.index ["email"], name: "index_people_on_email"
     t.index ["last_name"], name: "index_people_on_last_name"
   end

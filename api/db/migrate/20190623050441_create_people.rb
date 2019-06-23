@@ -4,6 +4,7 @@ class CreatePeople < ActiveRecord::Migration[5.2]
     enable_extension 'pgcrypto'
     create_table :people, id: :uuid do |t|
       t.string      :password_digest
+      t.string      :auth_token
       t.string      :first_name
       t.string      :last_name
       t.string      :address
@@ -21,5 +22,6 @@ class CreatePeople < ActiveRecord::Migration[5.2]
     end
     add_index :people, :last_name
     add_index :people, :email
+    add_index :people, :auth_token
   end
 end
